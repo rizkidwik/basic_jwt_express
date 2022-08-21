@@ -13,29 +13,6 @@ const pool = mysql.createPool({
 let db = {};
 
 
-// const mysqlpool = pool.promise()
-
-// db.getAllMahasiswa = () => {
-//     return new Promise((resolve, reject) => {
-//         pool.query("SELECT * FROM mahasiswa", (err, mahasiswa) => {
-//             if(err) {
-//                 return reject(err);
-//             }
-//             return resolve(mahasiswa);
-//         })
-//     })
-// };
-
-// db.getOneMahasiswa = (id) => {
-//     return new Promise((resolve, reject) => {
-//         pool.query("SELECT * FROM mahasiswa WHERE id = ?", [id], (err, mahasiswa) => {
-//             if(err) {
-//                 return reject(err);
-//             }
-//             return resolve(mahasiswa);
-//         })
-//     })
-// }
 
 // Request To User Table
 
