@@ -5,6 +5,11 @@ const apiRouter = express.Router();
 const db = require("./db.js");
 const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const jsonwebtoken = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const userRouter = require("./user")
+
+apiRouter.use(cookieParser());
+
 apiRouter.post('/register', async (req,res,next)=>{
     try {
         const username = req.body.username;
@@ -59,5 +64,37 @@ apiRouter.post('/login',async(req,res,next)=>{
         console.log(err)
     }
 })
+
+
+async function verifyToken(req,res,next){
+    const token = req.cookies.token;
+    console.log(token);
+
+    if(token===undefined){
+        return res.json({
+            message: "Access Denied! Unauthorized User"
+        });
+    } else {
+        jsonwebtoken.verify(token,process.env.SECRET_KEY,(err,authData)=>{
+            if(err){
+                res.json({
+                    message:"Invalid Token!"
+                });
+            }else {
+                const role = authData.user.role;
+                if(role==="admin"){
+                    next();
+                } else {
+                    
+                    return res.json({
+                        message: "Access Denied! You are not an Administrator"
+                    });
+                }
+            }
+        })
+    }
+}
+
+apiRouter.use('/user',verifyToken,userRouter);
 
 module.exports = apiRouter;
